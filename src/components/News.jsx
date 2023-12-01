@@ -31,7 +31,7 @@ export class News extends Component {
             console.log("No more Articles");
         }
         else {
-            let res = await fetch(`https://newsapi.org/v2/everything?q=tesla&from=2023-10-14&sortBy=publishedAt&apiKey=bd002a1cf4f64969a8819fcbfe3a190f&page=${this.state.page + 1}&pageSize=10`);
+            let res = await fetch(`https://newsapi.org/v2/top-headlines?country=us&apiKey=49a8ae182ee34c94a28ba734ad5c6a7b&page=${this.state.page + 1}&pageSize=10`);
             let data = await res.json();
             console.log(data.articles);
             this.setState({
