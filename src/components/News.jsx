@@ -5,14 +5,25 @@ export class News extends Component {
     constructor() {
         super();
         this.state = {
-            articles: []
+            articles: [],
+            page: 1,
+            loading: true,
+            totalArticles: 0
         }
+        this.handleNextClick = this.handleNextClick.bind(this);
+        this.handlePreviousClick = this.handlePreviousClick.bind(this);
     }
 
     componentDidMount() {
         fetch("https://newsapi.org/v2/top-headlines?country=us&apiKey=49a8ae182ee34c94a28ba734ad5c6a7b").then(res => res.json()).then(data => {
-            this.setState({ articles: data.articles });
-        })
+            this.setState({
+                ...this.state,
+                articles: data.articles,
+                totalArticles: data.totalResults,
+                loading: false
+            }
+            );
+        });
     }
     render() {
         console.log(this.state.articles);
