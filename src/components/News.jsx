@@ -48,6 +48,7 @@ export class News extends Component {
     }
 
     async handlePreviousClick() {
+        this.setState({...this.state, loading: true});
         let res = await fetch(`https://newsapi.org/v2/top-headlines?country=us&apiKey=49a8ae182ee34c94a28ba734ad5c6a7b&page=${this.state.page + 1}&pageSize=10`);
         let data = await res.json();
         this.setState({
@@ -55,7 +56,8 @@ export class News extends Component {
             page: this.state.page - 1,
             articles: data.articles,
             totalArticles: data.totalResults,
-        })
+            loading: false,
+        });
     }
     render() {
         console.log(this.state.articles);
