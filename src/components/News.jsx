@@ -1,9 +1,10 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import NewsItem from './NewsItem';
 import Spinner from './Spinner';
 import PropTypes from 'prop-types';
 
 export class News extends Component {
+
     static defaultProps = {
         country: 'in',
         pageSize: 10,
@@ -29,15 +30,18 @@ export class News extends Component {
     }
 
     componentDidMount() {
-        fetch("https://newsapi.org/v2/top-headlines?country=in&apiKey=49a8ae182ee34c94a28ba734ad5c6a7b").then(res => res.json()).then(data => {
-            this.setState({
-                ...this.state,
-                articles: data.articles,
-                totalArticles: data.totalResults,
-                loading: false
-            }
-            );
-        });
+        fetch(
+            "https://newsapi.org/v2/top-headlines?country=in&apiKey=49a8ae182ee34c94a28ba734ad5c6a7b"
+        )
+            .then(res => res.json())
+            .then(data => {
+                this.setState({
+                    ...this.state,
+                    articles: data.articles,
+                    totalArticles: data.totalResults,
+                    loading: false
+                });
+            });
     }
 
     async handleNextClick() {
@@ -54,48 +58,60 @@ export class News extends Component {
                 page: this.state.page + 1,
                 articles: data.articles,
                 totalArticles: data.totalResults,
-                loading: false,
-
-            });
+                loading: false
+            })
         }
     }
 
     async handlePreviousClick() {
         this.setState({ ...this.state, loading: true });
-        let res = await fetch(`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}apiKey=49a8ae182ee34c94a28ba734ad5c6a7b&page=${this.state.page + 1}&pageSize=10`);
+        let res = await fetch(`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=49a8ae182ee34c94a28ba734ad5c6a7b&page=${this.state.page + 1}&pageSize=10`);
         let data = await res.json();
         this.setState({
             ...this.state,
             page: this.state.page - 1,
             articles: data.articles,
             totalArticles: data.totalResults,
-            loading: false,
-        });
+            loading: false
+        })
     }
+
     render() {
+
         console.log(this.state.articles);
+
         return (
-            <div className='container my-3'>
-                <h2 className='text-center'>NewsMonkey - Top Headlines</h2>
-                {this.state.loading && <Spinner />}
-                {(this.state.loading != true) &&
-                    <div className='row'>
-                        {(this.state.articles.map((item, index) => {
-                            return <div className='col-md-4' key={index}>
-                                <NewsItem title={item.title} description={item.description}
-                                    imageUrl={item.urlToImage} />
-                            </div>
-                        }))
-                        }
-
-
+            <>
+                <div className='container my-3'>
+                    <h2 className='text-center' >NewsMonkey - Top Headlines</h2>
+                    {this.state.loading && <Spinner />}
+                    {(this.state.loading !== true) &&
+                        <div className="row">
+                            {
+                                this.state.articles.map((item, index) => {
+                                    return (
+                                        <div className="col-md-4" key={index}>
+                                            <NewsItem
+                                                title={item.title.slice(0, 45)}
+                                                decription={(item.description) ? item.description.slice(0, 88) : "Click for more Details"}
+                                                imageUrl={(item.urlToImage != null) ? item.urlToImage : "https://theleaflet.in/wp-content/uploads/2021/09/IT-Dept.jpg"}
+                                                newsURL={item.url}
+                                                author={item.author}
+                                                date={item.publishedAt}
+                                                source={item.source.name}
+                                            />
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
+                    }
+                    <div className='container d-flex justify-content-between'>
+                        <button disabled={this.state.page <= 1} type='button' className='btn btn-dark' onClick={this.handleNextClick}>&larr; Previous</button>
+                        <button disabled={this.state.page * 10 >= this.state.totalArticles} type='button' className='btn btn-dark' onClick={this.handlePreviousClick}>Next &rarr; </button>
                     </div>
-                }
-                <div className='container d-flex justify-content-between'>
-                    <button disabled={this.state.page <= 1} type='button' className='btn btn-dark' onClick={this.handleNextClick}>&larr; Previous</button>
-                    <button disabled={this.state.page * 10 >= this.state.totalArticles} type='button' className='btn btn-dark' onClick={this.handlePreviousClick}> Next &rarr; </button>
                 </div>
-            </div>
+            </>
         )
     }
 }
