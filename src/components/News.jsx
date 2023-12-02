@@ -3,8 +3,8 @@ import NewsItem from './NewsItem';
 import Spinner from './Spinner';
 
 export class News extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             articles: [],
             page: 1,
@@ -16,7 +16,7 @@ export class News extends Component {
     }
 
     componentDidMount() {
-        fetch("https://newsapi.org/v2/top-headlines?country=us&apiKey=49a8ae182ee34c94a28ba734ad5c6a7b").then(res => res.json()).then(data => {
+        fetch("https://newsapi.org/v2/top-headlines?country=in&apiKey=49a8ae182ee34c94a28ba734ad5c6a7b").then(res => res.json()).then(data => {
             this.setState({
                 ...this.state,
                 articles: data.articles,
@@ -32,8 +32,8 @@ export class News extends Component {
             console.log("No more Articles");
         }
         else {
-            this.setState({...this.state, loading: true});
-            let res = await fetch(`https://newsapi.org/v2/top-headlines?country=us&apiKey=49a8ae182ee34c94a28ba734ad5c6a7b&page=${this.state.page + 1}&pageSize=10`);
+            this.setState({ ...this.state, loading: true });
+            let res = await fetch(`https://newsapi.org/v2/top-headlines?country=in&category=${this.props.category}&apiKey=49a8ae182ee34c94a28ba734ad5c6a7b&page=${this.state.page + 1}&pageSize=10`);
             let data = await res.json();
             console.log(data.articles);
             this.setState({
@@ -48,8 +48,8 @@ export class News extends Component {
     }
 
     async handlePreviousClick() {
-        this.setState({...this.state, loading: true});
-        let res = await fetch(`https://newsapi.org/v2/top-headlines?country=us&apiKey=49a8ae182ee34c94a28ba734ad5c6a7b&page=${this.state.page + 1}&pageSize=10`);
+        this.setState({ ...this.state, loading: true });
+        let res = await fetch(`https://newsapi.org/v2/top-headlines?country=in&category=${this.props.category}apiKey=49a8ae182ee34c94a28ba734ad5c6a7b&page=${this.state.page + 1}&pageSize=10`);
         let data = await res.json();
         this.setState({
             ...this.state,
@@ -64,7 +64,7 @@ export class News extends Component {
         return (
             <div className='container my-3'>
                 <h2 className='text-center'>NewsMonkey - Top Headlines</h2>
-                {this.state.loading && <Spinner/>}
+                {this.state.loading && <Spinner />}
                 {(this.state.loading != true) &&
                     <div className='row'>
                         {(this.state.articles.map((item, index) => {
@@ -80,7 +80,7 @@ export class News extends Component {
                 }
                 <div className='container d-flex justify-content-between'>
                     <button disabled={this.state.page <= 1} type='button' className='btn btn-dark' onClick={this.handleNextClick}>&larr; Previous</button>
-                    <button disabled={this.state.page * 10 >= this.state.totalArticles}type='button' className='btn btn-dark' onClick={this.handlePreviousClick}> Next &rarr; </button>
+                    <button disabled={this.state.page * 10 >= this.state.totalArticles} type='button' className='btn btn-dark' onClick={this.handlePreviousClick}> Next &rarr; </button>
                 </div>
             </div>
         )
