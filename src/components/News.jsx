@@ -3,6 +3,18 @@ import NewsItem from './NewsItem';
 import Spinner from './Spinner';
 
 export class News extends Component {
+    static defaultProps = {
+        country: 'in',
+        pageSize: 10,
+        category: 'general'
+    }
+
+    static propTypes = {
+        country: PropTypes.string,
+        pageSize: PropTypes.number,
+        category: PropTypes.string
+    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -33,7 +45,7 @@ export class News extends Component {
         }
         else {
             this.setState({ ...this.state, loading: true });
-            let res = await fetch(`https://newsapi.org/v2/top-headlines?country=in&category=${this.props.category}&apiKey=49a8ae182ee34c94a28ba734ad5c6a7b&page=${this.state.page + 1}&pageSize=10`);
+            let res = await fetch(`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=49a8ae182ee34c94a28ba734ad5c6a7b&page=${this.state.page + 1}&pageSize=10`);
             let data = await res.json();
             console.log(data.articles);
             this.setState({
@@ -49,7 +61,7 @@ export class News extends Component {
 
     async handlePreviousClick() {
         this.setState({ ...this.state, loading: true });
-        let res = await fetch(`https://newsapi.org/v2/top-headlines?country=in&category=${this.props.category}apiKey=49a8ae182ee34c94a28ba734ad5c6a7b&page=${this.state.page + 1}&pageSize=10`);
+        let res = await fetch(`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}apiKey=49a8ae182ee34c94a28ba734ad5c6a7b&page=${this.state.page + 1}&pageSize=10`);
         let data = await res.json();
         this.setState({
             ...this.state,

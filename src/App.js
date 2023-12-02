@@ -9,7 +9,6 @@ export class App extends Component {
     return (
       <BrowserRouter>
         <Navbar />
-        <News category="health" />
         <Routes>
           <Route path='/' element={<News key="general" category='general' />} />
           <Route path='/business' element={<News key="business" category='business' />} />
