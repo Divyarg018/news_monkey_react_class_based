@@ -17,6 +17,10 @@ export class News extends Component {
         category: PropTypes.string
     }
 
+    capitizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -27,6 +31,8 @@ export class News extends Component {
         }
         this.handleNextClick = this.handleNextClick.bind(this);
         this.handlePreviousClick = this.handlePreviousClick.bind(this);
+
+        document.title = `${this.capitizeFirstLetter(this.props.category)}: News Monkey`
     }
 
     async updateNews(pageNo) {
