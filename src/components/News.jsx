@@ -32,6 +32,7 @@ export class News extends Component {
             console.log("No more Articles");
         }
         else {
+            this.setState({...this.state, loading: true});
             let res = await fetch(`https://newsapi.org/v2/top-headlines?country=us&apiKey=49a8ae182ee34c94a28ba734ad5c6a7b&page=${this.state.page + 1}&pageSize=10`);
             let data = await res.json();
             console.log(data.articles);
@@ -40,8 +41,9 @@ export class News extends Component {
                 page: this.state.page + 1,
                 articles: data.articles,
                 totalArticles: data.totalResults,
+                loading: false,
 
-            })
+            });
         }
     }
 
